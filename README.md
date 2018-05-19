@@ -22,8 +22,8 @@ To install via Package Control, do the following:
 
 **Default hotkeys:**
 
-* Linux/Windows: [Ctrl + Shift + H]
-* Mac: [Cmd + Shift + H]
+* Linux/Windows: [Ctrl + KE]
+* Mac: [Cmd + KE]
 
 ## Settings
 
