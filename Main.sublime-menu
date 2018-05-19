@@ -1,0 +1,40 @@
+[{
+	"id": "tools",
+	"children": [
+		{
+			"id": "eslint_fix",
+			"caption": "ESLint Fix - Fix File",
+			"command": "eslint_fix"
+		}
+	]
+}, {
+	"id": "preferences",
+	"children": [
+		{
+			"id": "package-settings",
+			"children": [
+				{
+					"caption": "ESLint Fix",
+					"children": [
+						 {
+							"caption": "Settings",
+							"command": "edit_settings",
+							"args": {
+								"base_file": "${packages}/eslint-fix/eslint-fix.sublime-settings",
+								"default": "// Settings in here override those in \"eslint-fix/eslint-fix.sublime-settings\",\n\n{\n\t$0\n}\n"
+							}
+						},
+						{
+							"caption": "Key Bindings",
+							"command": "edit_settings",
+							"args": {
+								"base_file": "${packages}/eslint-fix/Default ($platform).sublime-keymap",
+								"default": "[\n\t$0\n]\n"
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}]

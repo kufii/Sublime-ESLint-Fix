@@ -1,0 +1,4 @@
+[{
+  "caption": "ESLint Fix: Fix this file",
+  "command": "eslint_fix"
+}]
