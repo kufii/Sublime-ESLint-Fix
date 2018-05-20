@@ -103,7 +103,7 @@ class Preferences:
 
 		if os.path.isfile(config_path):
 			return config_path
-		elif not directory:
-			return None
+		elif directory:
+			return Preferences.find_up(directory, config_path)
 
-		return Preferences.find_up(directory, config_path)
+		return None
