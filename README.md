@@ -67,7 +67,6 @@ By default, the following settings are used:
 		"osx": ""
 	},
 }
-
 ```
 
 You can modify any settings by going to `Preferences > Package Settings > ESLint Fix > Settings`.

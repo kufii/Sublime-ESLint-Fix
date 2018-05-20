@@ -1,4 +1,4 @@
 [{
-  "keys": ["super+k", "super+e"],
-  "command": "eslint-fix"
+	"keys": ["super+k", "super+e"],
+	"command": "eslint-fix"
 }]
