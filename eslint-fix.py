@@ -12,29 +12,31 @@ class EslintFixCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		full_file_region = sublime.Region(0, self.view.size())
 		file_text = self.view.substr(full_file_region)
-		fixed_text = self.fix(file_text)
+		fixed_text = EsLint.fix(file_text, self.view.file_name())
 
 		if not fixed_text or fixed_text == file_text:
 			return
 
 		self.view.replace(edit, full_file_region, fixed_text)
 
-	def fix(self, text):
+
+class EsLint:
+	@staticmethod
+	def fix(text, filename):
 		dirname = None
-		if self.view.file_name():
-			dirname = os.path.dirname(self.view.file_name())
+		if filename:
+			dirname = os.path.dirname(filename)
 		with tempfile.NamedTemporaryFile(mode='w+', delete=False, dir=dirname, encoding='utf-8') as tmp:
 			try:
 				tmp.write(text)
 				tmp.close()
-				return self.run_eslint(tmp.name)
+				return EsLint.run_eslint(tmp.name, dirname)
 			finally:
 				os.unlink(tmp.name)
 		return None
 
 	@staticmethod
-	def run_eslint(filename):
-		directory = os.path.dirname(filename)
+	def run_eslint(filename, directory):
 		node = Preferences.get_node_path()
 		eslint = Preferences.get_eslint_path(directory)
 		config = Preferences.get_config_path(directory)
@@ -57,13 +59,13 @@ class EslintFixCommand(sublime_plugin.TextCommand):
 class Preferences:
 	@staticmethod
 	def get_pref(key):
+		default = sublime.load_settings(SETTINGS_FILE).get(key)
 		custom_settings = sublime.active_window().active_view().settings()
 
 		if custom_settings.has(PLUGIN_NAME):
-			return custom_settings.get(PLUGIN_NAME).get(key)
+			return custom_settings.get(PLUGIN_NAME).get(key, default)
 
-		default_settings = sublime.load_settings(SETTINGS_FILE)
-		return default_settings.get(key)
+		return default
 
 	@staticmethod
 	def find_up(directory, path):
@@ -85,9 +87,10 @@ class Preferences:
 
 	@staticmethod
 	def get_eslint_path(directory):
-		local_path = Preferences.get_local_eslint_path(directory)
-		if local_path:
-			return local_path
+		if directory:
+			local_path = Preferences.get_local_eslint_path(directory)
+			if local_path:
+				return local_path
 
 		return Preferences.get_pref('eslint_path').get(sublime.platform())
 
@@ -100,5 +103,7 @@ class Preferences:
 
 		if os.path.isfile(config_path):
 			return config_path
+		elif not directory:
+			return None
 
 		return Preferences.find_up(directory, config_path)
