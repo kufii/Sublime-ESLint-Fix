@@ -86,7 +86,7 @@ class Preferences:
 
 	@staticmethod
 	def get_node_path():
-		return Preferences.get_pref('node_path').get(sublime.platform())
+		return os.path.expanduser(Preferences.get_pref('node_path').get(sublime.platform()))
 
 	@staticmethod
 	def get_local_eslint_path(directory):
@@ -102,7 +102,7 @@ class Preferences:
 			if local_path:
 				return local_path
 
-		return Preferences.get_pref('eslint_path').get(sublime.platform())
+		return os.path.expanduser(Preferences.get_pref('eslint_path').get(sublime.platform()))
 
 	@staticmethod
 	def get_config_path(directory):
@@ -111,8 +111,8 @@ class Preferences:
 		if not config_path:
 			return None
 
-		if os.path.isfile(config_path):
-			return config_path
+		if os.path.isfile(os.path.expanduser(config_path)):
+			return os.path.expanduser(config_path)
 		elif directory:
 			return Preferences.find_up(directory, config_path)
 
