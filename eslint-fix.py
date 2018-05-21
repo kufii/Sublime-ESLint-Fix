@@ -1,6 +1,7 @@
 import tempfile
 import os
 from subprocess import Popen, PIPE
+from time import sleep
 import sublime
 import sublime_plugin
 
@@ -32,7 +33,13 @@ class EsLint:
 				tmp.close()
 				return EsLint.run_eslint(tmp.name, dirname)
 			finally:
-				os.unlink(tmp.name)
+				# The loop is here as a really dumb workaround for a rare google drive race condition.
+				for _ in range(0, 10):
+					try:
+						os.unlink(tmp.name)
+						break
+					except PermissionError:
+						sleep(0.01)
 		return None
 
 	@staticmethod
@@ -52,7 +59,7 @@ class EsLint:
 				with open(filename, "r", encoding="utf-8") as formatted:
 					return formatted.read()
 			except OSError:
-				raise Exception('Couldn\'t find Node.js. Make sure it\'s in your $PATH by running `node -v` in your command-line.')
+				raise Exception('Couldn\'t find Node.js. Check that your configuration is correct.')
 
 		return None
 
