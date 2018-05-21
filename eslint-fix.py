@@ -90,7 +90,10 @@ class Preferences:
 
 	@staticmethod
 	def get_local_eslint_path(directory):
-		return Preferences.find_up(directory, Preferences.get_pref('local_eslint_path').get(sublime.platform()))
+		local_path = Preferences.get_pref('local_eslint_path').get(sublime.platform())
+		if local_path:
+			return Preferences.find_up(directory, local_path)
+		return None
 
 	@staticmethod
 	def get_eslint_path(directory):
