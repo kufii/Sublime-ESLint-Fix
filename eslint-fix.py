@@ -51,12 +51,12 @@ class EsLint:
 		if node and eslint:
 			cmd = [node, eslint, '--fix', filename]
 			if config:
-				cmd.extend(["--config", config])
+				cmd.extend(['--config', config])
 
 			try:
 				proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE, shell=IS_WINDOWS)
 				proc.communicate()
-				with open(filename, "r", encoding="utf-8") as formatted:
+				with open(filename, 'r', encoding='utf-8') as formatted:
 					return formatted.read()
 			except OSError:
 				raise Exception('Couldn\'t find Node.js. Check that your configuration is correct.')
@@ -106,7 +106,7 @@ class Preferences:
 
 	@staticmethod
 	def get_config_path(directory):
-		config_path = Preferences.get_pref("config_path").get(sublime.platform())
+		config_path = Preferences.get_pref('config_path').get(sublime.platform())
 
 		if not config_path:
 			return None
