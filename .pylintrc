@@ -4,6 +4,5 @@ indent-string='\t'
 [MESSAGES CONTROL]
 disable=
 	missing-docstring,
-	import-error,
 	too-few-public-methods,
 	line-too-long
