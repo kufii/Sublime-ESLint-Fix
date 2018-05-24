@@ -86,13 +86,13 @@ class Preferences:
 
 	@staticmethod
 	def get_node_path():
-		return os.path.expanduser(Preferences.get_pref('node_path').get(sublime.platform()))
+		return PathUtil.expand_path(Preferences.get_pref('node_path').get(sublime.platform()))
 
 	@staticmethod
 	def get_local_eslint_path(directory):
-		local_path = Preferences.get_pref('local_eslint_path').get(sublime.platform())
+		local_path = PathUtil.expand_path(Preferences.get_pref('local_eslint_path').get(sublime.platform()))
 		if local_path:
-			return Preferences.find_up(directory, local_path)
+			return PathUtil.find_up(directory, local_path)
 		return None
 
 	@staticmethod
@@ -102,18 +102,33 @@ class Preferences:
 			if local_path:
 				return local_path
 
-		return os.path.expanduser(Preferences.get_pref('eslint_path').get(sublime.platform()))
+		return PathUtil.expand_path(Preferences.get_pref('eslint_path').get(sublime.platform()))
 
 	@staticmethod
 	def get_config_path(directory):
-		config_path = Preferences.get_pref('config_path').get(sublime.platform())
+		config_path = PathUtil.expand_path(Preferences.get_pref('config_path').get(sublime.platform()))
 
 		if not config_path:
 			return None
 
-		if os.path.isfile(os.path.expanduser(config_path)):
-			return os.path.expanduser(config_path)
+		if os.path.isfile(config_path):
+			return config_path
 		elif directory:
-			return Preferences.find_up(directory, config_path)
+			return PathUtil.find_up(directory, config_path)
 
 		return None
+
+class PathUtil:
+	@staticmethod
+	def find_up(directory, path):
+		while not os.path.exists(os.path.join(directory, path)):
+			parent_dir = os.path.abspath(os.path.join(directory, os.pardir))
+			if parent_dir == directory:
+				return None
+			directory = parent_dir
+
+		return os.path.join(directory, path)
+
+	@staticmethod
+	def expand_path(path):
+		return os.path.expanduser(os.path.expandvars(path))
