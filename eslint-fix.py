@@ -25,8 +25,8 @@ class EslintFixCommand(sublime_plugin.TextCommand):
 
 
 class EsLint:
-	@staticmethod
-	def fix(text, filename):
+	@classmethod
+	def fix(cls, text, filename):
 		dirname = None
 		if filename:
 			dirname = os.path.dirname(filename)
@@ -34,7 +34,7 @@ class EsLint:
 			try:
 				tmp.write(text)
 				tmp.close()
-				return EsLint.run_eslint(tmp.name, dirname)
+				return cls.run_eslint(tmp.name, dirname)
 			finally:
 				# The loop is here as a really dumb workaround for a rare google drive race condition.
 				for _ in range(0, 10):
@@ -78,29 +78,29 @@ class Preferences:
 
 		return default
 
-	@staticmethod
-	def get_node_path():
-		return PathUtil.expand_path(Preferences.get_pref('node_path').get(sublime.platform()))
+	@classmethod
+	def get_node_path(cls):
+		return PathUtil.expand_path(cls.get_pref('node_path').get(sublime.platform()))
 
-	@staticmethod
-	def get_local_eslint_path(directory):
-		local_path = PathUtil.expand_path(Preferences.get_pref('local_eslint_path').get(sublime.platform()))
+	@classmethod
+	def get_local_eslint_path(cls, directory):
+		local_path = PathUtil.expand_path(cls.get_pref('local_eslint_path').get(sublime.platform()))
 		if local_path:
 			return PathUtil.find_up(directory, local_path)
 		return None
 
-	@staticmethod
-	def get_eslint_path(directory):
+	@classmethod
+	def get_eslint_path(cls, directory):
 		if directory:
-			local_path = Preferences.get_local_eslint_path(directory)
+			local_path = cls.get_local_eslint_path(directory)
 			if local_path:
 				return local_path
 
-		return PathUtil.expand_path(Preferences.get_pref('eslint_path').get(sublime.platform()))
+		return PathUtil.expand_path(cls.get_pref('eslint_path').get(sublime.platform()))
 
-	@staticmethod
-	def get_config_path(directory):
-		config_path = PathUtil.expand_path(Preferences.get_pref('config_path').get(sublime.platform()))
+	@classmethod
+	def get_config_path(cls, directory):
+		config_path = PathUtil.expand_path(cls.get_pref('config_path').get(sublime.platform()))
 
 		if not config_path:
 			return None
