@@ -75,16 +75,6 @@ class Preferences:
 		return default
 
 	@staticmethod
-	def find_up(directory, path):
-		while not os.path.exists(os.path.join(directory, path)):
-			parent_dir = os.path.abspath(os.path.join(directory, os.pardir))
-			if parent_dir == directory:
-				return None
-			directory = parent_dir
-
-		return os.path.join(directory, path)
-
-	@staticmethod
 	def get_node_path():
 		return PathUtil.expand_path(Preferences.get_pref('node_path').get(sublime.platform()))
 
