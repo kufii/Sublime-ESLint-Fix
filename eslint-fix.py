@@ -2,12 +2,15 @@ import tempfile
 import os
 from subprocess import Popen, PIPE
 from time import sleep
+
 import sublime
 import sublime_plugin
+
 
 PLUGIN_NAME = 'eslint-fix'
 SETTINGS_FILE = PLUGIN_NAME + '.sublime-settings'
 IS_WINDOWS = sublime.platform() == 'windows'
+
 
 class EslintFixCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -63,6 +66,7 @@ class EsLint:
 
 		return None
 
+
 class Preferences:
 	@staticmethod
 	def get_pref(key):
@@ -107,6 +111,7 @@ class Preferences:
 			return PathUtil.find_up(directory, config_path)
 
 		return None
+
 
 class PathUtil:
 	@staticmethod
