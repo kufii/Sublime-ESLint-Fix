@@ -1,2 +1,2 @@
-[pycodestyle]
+[flake8]
 ignore=W191,E501,E101
