@@ -5,4 +5,6 @@ indent-string='\t'
 disable=
 	missing-docstring,
 	too-few-public-methods,
-	line-too-long
+	too-many-arguments,
+	line-too-long,
+	wrong-import-position
