@@ -92,5 +92,5 @@ For example:
 }
 ```
 
-### Acknowledgements
+### Acknowledgments
 While the code is unique, some of it is inspired by [this plugin](https://github.com/TheSavior/ESLint-Formatter). My plugin differs by running on the current buffer instead of the last saved state of the file.
