@@ -7,4 +7,5 @@ disable=
 	too-few-public-methods,
 	too-many-arguments,
 	line-too-long,
-	wrong-import-position
+	wrong-import-position,
+	relative-beyond-top-level

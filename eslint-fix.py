@@ -1,11 +1,7 @@
-import sys
-from os.path import dirname
-
 import sublime
 import sublime_plugin
 
-sys.path.insert(0, dirname(__file__))
-from src import eslint  # noqa
+from .src import eslint
 
 
 class EslintFixCommand(sublime_plugin.TextCommand):
