@@ -1,11 +1,7 @@
-[FORMAT]
-indent-string='\t'
-
 [MESSAGES CONTROL]
 disable=
 	missing-docstring,
 	too-few-public-methods,
 	too-many-arguments,
 	line-too-long,
-	wrong-import-position,
 	relative-beyond-top-level
