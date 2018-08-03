@@ -18,7 +18,7 @@ To install via Package Control, do the following:
 ## Commands
 **Command Palette**
 
-* ESLintFormatter: ESLint Fix: Fix this file
+* ESLint Fix: Fix this file
 
 **Default hotkeys:**
 
