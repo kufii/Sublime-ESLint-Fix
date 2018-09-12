@@ -7,7 +7,7 @@ A Sublime Text 3 plugin to run eslint --fix on the current file
 This plugin requires ESLint in order to function. For information on installing ESLint, check out the [Getting Started guide](https://eslint.org/docs/user-guide/getting-started).
 
 ### Plugin Installation
-In the future, once approved, this plugin will be installable via [Package Control](https://packagecontrol.io/installation).
+This plugins is installable via [Package Control](https://packagecontrol.io/installation).
 
 To install via Package Control, do the following:
 
