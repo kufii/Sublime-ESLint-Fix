@@ -19,8 +19,10 @@ def get_pref(key):
     return default
 
 
-def get_node_path():
-    return pathutil.expand_path(get_pref('node_path').get(sublime.platform()))
+def get_path():
+    return map(pathutil.expand_path,
+               get_pref('paths').get(sublime.platform()) +
+               os.environ.get('PATH', '').split(os.pathsep))
 
 
 def get_local_eslint_path(directory):
@@ -28,15 +30,6 @@ def get_local_eslint_path(directory):
     if local_path:
         return pathutil.find_up(directory, local_path)
     return None
-
-
-def get_eslint_path(directory):
-    if directory:
-        local_path = get_local_eslint_path(directory)
-        if local_path:
-            return local_path
-
-    return pathutil.expand_path(get_pref('eslint_path').get(sublime.platform()))
 
 
 def get_config_path(directory):

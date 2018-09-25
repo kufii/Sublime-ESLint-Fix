@@ -5,7 +5,7 @@ from time import sleep
 
 import sublime
 
-from . import preferences
+from . import preferences, pathutil
 
 
 def fix(text, filename):
@@ -29,21 +29,33 @@ def fix(text, filename):
 
 
 def _run(filename, directory):
-    node = preferences.get_node_path()
-    eslint = preferences.get_eslint_path(directory)
+    cmd = None
+
+    local_eslint = preferences.get_local_eslint_path(directory)
+    if local_eslint:
+        node = pathutil.find_executable(preferences.get_path(), 'node')
+        if not node:
+            raise Exception('Could not find Node.js. Check that your configuration is correct.')
+        cmd = [node, local_eslint]
+    else:
+        eslint = pathutil.find_executable(preferences.get_path(), 'eslint')
+        if not eslint:
+            raise Exception('Could not find eslint. Check that your configuration is correct.')
+        cmd = [eslint]
+
     config = preferences.get_config_path(directory)
 
-    if node and eslint:
-        cmd = [node, eslint, '--fix', filename]
-        if config:
-            cmd.extend(['--config', config])
+    cmd.extend(['--fix', filename])
+    if config:
+        cmd.extend(['--config', config])
 
-        try:
-            proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE, shell=(sublime.platform() == 'windows'))
-            proc.communicate()
-            with open(filename, 'r', encoding='utf-8') as formatted:
-                return formatted.read()
-        except OSError:
-            raise Exception('Couldn\'t find Node.js. Check that your configuration is correct.')
+    print(cmd)
+    try:
+        proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE, shell=(sublime.platform() == 'windows'))
+        proc.communicate()
+        with open(filename, 'r', encoding='utf-8') as formatted:
+            return formatted.read()
+    except OSError:
+        raise Exception('Error occured when running --fix')
 
     return None
