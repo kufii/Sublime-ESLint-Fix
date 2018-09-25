@@ -21,8 +21,9 @@ def get_pref(key):
 
 def get_path():
     return map(pathutil.expand_path,
-               get_pref('paths').get(sublime.platform()) +
-               os.environ.get('PATH', '').split(os.pathsep))
+               filter(None,
+                      get_pref('paths').get(sublime.platform()) +
+                      os.environ.get('PATH', '').split(os.pathsep)))
 
 
 def get_local_eslint_path(directory):
