@@ -31,11 +31,11 @@ By default, the following settings are used:
 
 ```javascript
 {
-	// The installation location of node.
-	"node_path": {
-		"windows": "node.exe",
-		"linux": "/usr/bin/nodejs",
-		"osx": "/usr/local/bin/node"
+	// The paths to look for executables
+	"paths": {
+		"linux": [],
+		"osx": [],
+		"windows": []
 	},
 
 	// The location to search for a locally installed eslint package.
@@ -46,13 +46,6 @@ By default, the following settings are used:
 		"windows": "node_modules/eslint/bin/eslint.js",
 		"linux": "node_modules/.bin/eslint",
 		"osx": "node_modules/.bin/eslint"
-	},
-
-	// The location of the globally installed eslint package to use as a fallback
-	"eslint_path": {
-		"windows": "%APPDATA%/npm/node_modules/eslint/bin/eslint",
-		"linux": "/usr/bin/eslint",
-		"osx": "/usr/local/bin/eslint"
 	},
 
 	// Specify this path to an eslint config file to override the default behavior.

@@ -1,0 +1,5 @@
+ESLint Fix 1.0.1 changelog
+
+Made the settings more simple.
+
+You can now just specify paths to look for executables. Depending on your settings this could be a breaking change, so make sure your settings file is set up for the new format.
