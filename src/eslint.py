@@ -28,20 +28,31 @@ def fix(text, filename):
     return None
 
 
+def _get_node_path():
+    node = pathutil.find_executable(preferences.get_path(), 'node')
+    if not node:
+        raise Exception('Could not find Node.js. Check that your configuration is correct.')
+    return node
+
+
+def _get_eslint_path():
+    eslint = pathutil.find_executable(preferences.get_path(), 'eslint')
+    if not eslint:
+        raise Exception('Could not find eslint. Check that your configuration is correct.')
+    return eslint
+
+
 def _run(filename, directory):
     cmd = None
 
     local_eslint = preferences.get_local_eslint_path(directory)
     if local_eslint:
-        node = pathutil.find_executable(preferences.get_path(), 'node')
-        if not node:
-            raise Exception('Could not find Node.js. Check that your configuration is correct.')
-        cmd = [node, local_eslint]
+        cmd = [_get_node_path(), local_eslint]
     else:
-        eslint = pathutil.find_executable(preferences.get_path(), 'eslint')
-        if not eslint:
-            raise Exception('Could not find eslint. Check that your configuration is correct.')
-        cmd = [eslint]
+        if sublime.platform() == 'windows':
+            cmd = [_get_eslint_path()]
+        else:
+            cmd = [_get_node_path(), _get_eslint_path()]
 
     config = preferences.get_config_path(directory)
 
