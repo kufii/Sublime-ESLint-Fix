@@ -70,7 +70,7 @@ To override global plugin configuration for a specific project, add a settings o
 
 For example:
 
-```
+```javascript
 {
 	"folders": [
 		{
