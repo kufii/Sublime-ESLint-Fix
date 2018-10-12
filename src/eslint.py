@@ -53,7 +53,7 @@ def _run(text, filepath):
     ])
     if filename:
         # Report file name to eslint.
-        '--stdin-filename', filename,
+        cmd.extend(['--stdin-filename', filename])
     if config:
         cmd.extend(['--config', config])
 
