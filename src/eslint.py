@@ -1,7 +1,6 @@
+import json
 import os
-import tempfile
 from subprocess import Popen, PIPE
-from time import sleep
 
 import sublime
 
@@ -9,23 +8,7 @@ from . import preferences, pathutil
 
 
 def fix(text, filename):
-    dirname = None
-    if filename:
-        dirname = os.path.dirname(filename)
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False, dir=dirname, encoding='utf-8') as tmp:
-        try:
-            tmp.write(text)
-            tmp.close()
-            return _run(tmp.name, dirname)
-        finally:
-            # The loop is here as a really dumb workaround for a rare google drive race condition.
-            for _ in range(0, 10):
-                try:
-                    os.unlink(tmp.name)
-                    break
-                except PermissionError:
-                    sleep(0.01)
-    return None
+    return _run(text, filename)
 
 
 def _get_node_path():
@@ -42,8 +25,13 @@ def _get_eslint_path():
     return eslint
 
 
-def _run(filename, directory):
+def _run(text, filepath):
     cmd = None
+
+    filename = None
+    directory = None
+    if filepath:
+        (directory, filename) = os.path.split(filepath)
 
     local_eslint = preferences.get_local_eslint_path(directory)
     if local_eslint:
@@ -56,17 +44,37 @@ def _run(filename, directory):
 
     config = preferences.get_config_path(directory)
 
-    cmd.extend(['--fix', filename])
+    cmd.extend([
+        '--stdin',
+        # When formatting from stdin, we need to pass --fix-dry-run, not --fix
+        '--fix-dry-run',
+        # Default formatter doesn't output formatted code.
+        '--format=json'
+    ])
+    if filename:
+        # Report file name to eslint.
+        cmd.extend(['--stdin-filename', filename])
     if config:
         cmd.extend(['--config', config])
 
-    print(cmd)
     try:
-        proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE, shell=(sublime.platform() == 'windows'))
-        proc.communicate()
-        with open(filename, 'r', encoding='utf-8') as formatted:
-            return formatted.read()
+        proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE,
+                     cwd=directory,
+                     shell=(sublime.platform() == 'windows'))
+        (stdout, stderr) = proc.communicate(text.encode('utf-8'))
+        # Possible exit codes:
+        #  0 - no linting issues. Might or might not provide formatting.
+        #  1 - has linting issues. Might or might not provide formatting.
+        #  2 - serious error, e.g. missing configuration; error in stderr
+        if proc.returncode <= 1:
+            obj = json.loads(stdout.decode('utf-8'), encoding='utf-8')
+            # First list item is the result for formatted file.
+            if 'output' in obj[0]:
+                return obj[0].get('output')
+        else:
+            err = stderr.decode('utf-8')
+            print('ESlint Fix: File not formatted due to an error "%s".' % err)
     except OSError:
-        raise Exception('Error occured when running --fix')
+        raise Exception('Error occured when running: %s' % ' '.join(cmd))
 
     return None
