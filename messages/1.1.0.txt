@@ -1,4 +1,4 @@
-ESLint Fix 1.0.1 changelog
+ESLint Fix 1.1.0 changelog
 
 Made the settings more simple.
 
