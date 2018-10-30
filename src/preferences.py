@@ -27,6 +27,8 @@ def get_path():
 
 
 def get_local_eslint_path(directory):
+    if not directory:
+        return None
     local_path = pathutil.expand_path(get_pref('local_eslint_path').get(sublime.platform()))
     if local_path:
         return pathutil.find_up(directory, local_path)
