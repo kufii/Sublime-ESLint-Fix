@@ -1,0 +1,3 @@
+ESLint Fix 1.1.2 changelog
+
+Fixed issue when running on an unsaved file
