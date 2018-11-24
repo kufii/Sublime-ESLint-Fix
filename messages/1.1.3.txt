@@ -1,0 +1,3 @@
+ESLint Fix 1.1.3 changelog
+
+Fixed path variables in settings
